@@ -9,23 +9,23 @@ import datetime
 import RPi.GPIO as GPIO
 
 #Variablen
-fwd1Pin = 18
-bwd1Pin = 23
+fwdLPin = 18
+bwdLPin = 23
 writeFileDir = "remote/move/"
 
 #Numerierung dper Board-Beschriftung
 GPIO.setmode(GPIO.BCM)
 #Setzen der In-/Outputs der benötigten Pins
-GPIO.setup(fwd1Pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(bwd1Pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(fwdLPin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(bwdLPin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 def output():
         command = ""
         
-        if GPIO.input(fwd1Pin):
-                command += "F1"
-        elif GPIO.input(bwd1Pin):
-                command += "B1"
+        if GPIO.input(fwdLPin):
+                command += "_FR_"
+        elif GPIO.input(bwdLPin):
+                command += "_BR_"
 
         return command
 
