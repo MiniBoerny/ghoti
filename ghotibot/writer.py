@@ -9,23 +9,23 @@ import datetime
 import RPi.GPIO as GPIO
 
 #Variablen
-fwdPin = 18
-bwdPin = 23
+fwd1Pin = 18
+bwd1Pin = 23
 writeFileDir = "remote/move/"
 
 #Numerierung dper Board-Beschriftung
 GPIO.setmode(GPIO.BCM)
 #Setzen der In-/Outputs der benötigten Pins
-GPIO.setup(fwdPin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(bwdPin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(fwd1Pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(bwd1Pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 def output():
         command = ""
         
-        if GPIO.input(fwdPin):
-                command += "F"
-        elif GPIO.input(bwdPin):
-                command += "B"
+        if GPIO.input(fwd1Pin):
+                command += "F1"
+        elif GPIO.input(bwd1Pin):
+                command += "B1"
 
         return command
 
@@ -42,7 +42,7 @@ try:
                 if command != "":
                         with open(writeFileDir + ts, "w") as f:
                                 f.write(command)
-                        print ts + ":" + command
+                        print writeFileDir + ts + ":" + command
                         time.sleep(0.05)
                 else:
                         print "no output"

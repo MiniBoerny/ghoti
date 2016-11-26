@@ -9,16 +9,16 @@ import RPi.GPIO as GPIO
 
 #Variablen
 runPin = 21
-fwdPin = 26
-bwdPin = 19
+fwd1Pin = 26
+bwd1Pin = 19
 readFileDir = "remote/move/"
 
 #Numerierung dper Board-Beschriftung
 GPIO.setmode(GPIO.BCM)
 #Setzen der In-/Outputs der benötigten Pins
 GPIO.setup(runPin, GPIO.OUT, initial=GPIO.HIGH)
-GPIO.setup(fwdPin, GPIO.OUT, initial=GPIO.HIGH)
-GPIO.setup(bwdPin, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(fwd1Pin, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(bwd1Pin, GPIO.OUT, initial=GPIO.HIGH)
 
 def listen():
     empty = True
@@ -31,35 +31,39 @@ def listen():
             fcont = f.read()
         os.remove(readFile)
 
-        if "F" in fcont:
-            fwd(True)
-            bwd(False)
+        if "F1" in fcont:
+            fwd1(True)
+            bwd1(False)
             empty = False
-        elif "B" in fcont:
-            fwd(False)
-            bwd(True)
+        elif "B1" in fcont:
+            fwd1(False)
+            bwd1(True)
             empty = False
         else:
-            fwd(False)
-            bwd(False)
+            idle()
 
         print readFile + ": " + fcont
-        return empty
     else:
         print "no input"
-        fwd(False)
+        idle()
 
-def fwd(enabled):
-    if enabled:
-        GPIO.output(fwdPin, GPIO.LOW)
-    else:
-        GPIO.output(fwdPin, GPIO.HIGH)
+    return empty
 
-def bwd(enabled):
+def idle():
+    fwd1(False)
+    bwd1(False)
+
+def fwd1(enabled):
     if enabled:
-        GPIO.output(bwdPin, GPIO.LOW)
+        GPIO.output(fwd1Pin, GPIO.LOW)
     else:
-        GPIO.output(bwdPin, GPIO.HIGH)
+        GPIO.output(fwd1Pin, GPIO.HIGH)
+
+def bwd1(enabled):
+    if enabled:
+        GPIO.output(bwd1Pin, GPIO.LOW)
+    else:
+        GPIO.output(bwd1Pin, GPIO.HIGH)
 
 try:
     #Initial
